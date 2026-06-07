@@ -15,6 +15,7 @@
         .status-BOOKED    { color: #F59E0B; font-weight: bold; }
         .status-COMPLETED { color: #10B981; font-weight: bold; }
         .status-CANCELLED { color: #94A3B8; }
+        .btn-complete { background: #10B981; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 8px; font-size: 0.8em; }
         .btn-cancel { background: #EF4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 8px; font-size: 0.8em; }
         .nav-links { margin-top: 10px; }
         .nav-links a { margin-right: 15px; color: #14B8A6; text-decoration: none; font-weight: bold; }
@@ -57,6 +58,9 @@
                     <span th:text="${appt.status}"
                           th:class="${'status-' + appt.status}">BOOKED</span>
                     <button th:if="${appt.status == 'BOOKED'}" 
+                            th:onclick="|completeAppointment(${appt.apptId})|"
+                            class="btn-complete">完成</button>
+                    <button th:if="${appt.status == 'BOOKED'}" 
                             th:onclick="|cancelAppointment(${appt.apptId})|"
                             class="btn-cancel">取消</button>
                 </td>
@@ -65,6 +69,22 @@
     </table>
     
     <script th:inline="javascript">
+        function completeAppointment(id) {
+            if (!confirm('確定此病患已完成看診嗎？')) return;
+            
+            fetch('/api/appointments/' + id + '/status', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'COMPLETED' })
+            }).then(res => {
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    alert('操作失敗，請稍後再試');
+                }
+            });
+        }
+
         function cancelAppointment(id) {
             if (!confirm('確定要取消這筆掛號嗎？')) return;
             
