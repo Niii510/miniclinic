@@ -24,6 +24,8 @@ https://miniclinic-Niii510.onrender.com
 - 線上掛號功能
 - 掛號狀態變更（booked / completed / cancelled）
 - RESTful API（支援第三方整合）
+- 掛號狀態變更（診間醫師可一鍵標記「看診完成」）
+
 
 ## 本機執行
 
