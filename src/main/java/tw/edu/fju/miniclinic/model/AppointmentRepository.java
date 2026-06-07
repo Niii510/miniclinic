@@ -1,6 +1,7 @@
 package tw.edu.fju.miniclinic.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,4 +12,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByPatient(Patient patient);
     long countByApptDateBetween(LocalDate from, LocalDate to);
     List<Appointment> findByDoctorAndApptDate(Doctor doctor, LocalDate apptDate);  // 新加入
+
+    @Query("SELECT a.status, COUNT(a) FROM Appointment a GROUP BY a.status")
+    List<Object[]> countAppointmentsByStatus();
 }
